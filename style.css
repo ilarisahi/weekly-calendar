@@ -1,0 +1,188 @@
+body {
+    background-image: url('/footer_lodyas.png');
+}
+
+.calendar-container {
+    background: white;
+    padding: 30px;
+}
+
+.calendar-container textarea {
+    max-width: 100%;
+}
+
+.calendar-navigation {
+    margin: 10px 0 10px 0;
+}
+
+#editor-pill {
+    padding: 10px 0 0 0;
+}
+
+.calendar-wrapper {
+	position: relative;
+}
+
+.calendar-title {
+	font-size: 24px;
+    line-height: 24px;
+    float: left;
+	font-weight: bold;
+    padding-top: 2px;
+    text-transform: lowercase;
+    margin-bottom: 10px;
+}
+
+.calendar-week {
+	clear: both;
+	border-top: none;
+    border-bottom: none;
+    margin: 20px 0;
+    border: 1px solid #eeeeee;
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.day:nth-child(odd) {
+	background: #f9f9f9;
+}
+
+.day:nth-child(odd):hover {
+	background: #f1f1f1;
+}
+
+.day:nth-child(even):hover {
+    background: #f9f9f9;
+}
+
+.day:last-child {
+    border-bottom: 2px solid #dddddd;
+}
+
+.day {
+	border-top: 2px solid #dddddd;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    padding: 4px 8px;
+	overflow: hidden;
+	min-height: 50px;
+}
+
+.day-name {
+	float: left;
+	font-size: 18px;
+	margin-bottom: 10px;
+}
+
+.date {
+	float: right;
+	font-size: 18px;
+}
+
+.events-wrapper {
+	clear: both;
+}
+.event {
+	overflow: hidden;
+	line-height: 1.1;
+	padding-bottom: 15px;
+}
+
+div.event/*:not(:first-child)*/ {
+    padding-top: 15px;
+    border-top: 2px #dddddd;
+    border-top-style: dashed;
+}
+
+.event-title {
+	font-weight: bold;
+	margin-bottom: 5px;
+	display: block;
+}
+
+.event-description {
+	margin-bottom: 10px;
+	display: block;
+}
+
+.event-time-wrapper {
+	float: right;
+	font-weight: bold;
+}
+
+.event-img {
+	height: 14px;
+	width: auto;
+	float: left;
+	margin-right: 2px;
+	vertical-align: baseline;
+}
+
+.event-location-wrapper {
+	float: left;
+}
+
+.event-owner {
+	float: right;
+	clear: both;
+}
+
+.event-button-wrapper {
+	float: left;
+	height: 32px;
+    margin-top: 5px;
+}
+
+.event-button-wrapper a, .event-button-wrapper form {
+	float: left;
+	margin: 0 5px 0 0;
+}
+
+.gbs3 .trumbowyg-box, .trumbowyg-editor {
+	margin: 0;
+}
+
+.loadimg {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	position: absolute;
+	z-index: 10;
+	left: 0;
+	right: 0;
+	top: 0;
+}
+
+.navi {
+	font-weight: bold;
+}
+
+[id^=upcoming-]:hover [id^=event-title-] {
+	color: #52b8df;
+}
+[id^=event-title-] {
+	color: #5c626b;
+}
+[id^=event-title-]:hover {
+	color: #52b8df;
+}
+.calendar-upcoming .calendar-upcoming-event a{
+	color: inherit;
+}
+
+.calendar-upcoming-event {
+	line-height: 1.1;
+}
+
+.calendar-upcoming-event .upcoming-event-description {
+	clear: both;
+    display: block;
+	margin: 10px 0 10px 0;
+}
+
+.calendar-upcoming-event .upcoming-event-time-wrapper {
+	font-weight: normal;
+	float: none;
+}
