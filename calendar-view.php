@@ -1,4 +1,6 @@
 <?php
+
+/* This view contains whole calendar and is updated every time user moves forward/backwards */
 echo ("<div class='calendar-content'>
         <div class='calendar-navigation'>
             <button class='btn btn-primary' style='float: left;' value='previous' name='previous' onClick='navigate(\"" . $monday . "\",\"previous\")'><i class='fa fa-backward' aria-hidden='true'></i></button>
@@ -7,6 +9,7 @@ echo ("<div class='calendar-content'>
         </div>
         <div class='calendar-title'>");
 
+    /* Initialize date range string */
     $beginMonth = date('F', strtotime($monday));
     $endMonth = date('F', strtotime($sunday));
     $beginMonthInt = intval(date('m', strtotime($monday)))-1;
@@ -38,6 +41,7 @@ echo ("<div class='calendar-content'>
         $query  = "SELECT * FROM weeklyCalendarEvents WHERE eventDate='" . $firstDay . "' ORDER BY starts ASC";
         $result = $conn->query($query);
         
+        /* Get this week's events from database */
         if ($result->num_rows) {
             echo("<div class='events-wrapper'>");
             while ($data = $result->fetch_array(MYSQLI_ASSOC)) {
@@ -69,7 +73,8 @@ echo ("<div class='calendar-content'>
             echo("</div>");
         }
         echo("</div>");
-        
+
+        /* Move to next day */        
         $firstDay = date('Y-m-d H:i:s', strtotime($firstDay . ' +1 day'));
     }
     echo ("</div>

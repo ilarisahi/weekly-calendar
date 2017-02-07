@@ -1,4 +1,6 @@
 <?php
+
+/* Delete event from database */
 if ($_POST['clear']) {
 	include '../db-config.php';
 		

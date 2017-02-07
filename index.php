@@ -27,6 +27,7 @@
                     <div class="tab-content">
                         <div id="calendar-pill" class="tab-pane fade in active">
                             <?php
+                                /* Initialize this week's monday and sunday */
                                 date_default_timezone_set("Europe/Helsinki");
                                 setlocale(LC_TIME, "fi_FI");
 
@@ -40,6 +41,7 @@
                                 $monday = $firstDay . " 00:00:00";
                                 $sunday = $lastDay . " 23:59:59";
 
+                                /* Get new monday and sunday if user has event id */
                                 $urlId = $_GET["eventId"];
                                 include "db-config.php";
                                 if (!empty($urlId)) {
@@ -63,6 +65,7 @@
                                 echo ("</div>");
 
                                 if ($urlId != 0) {
+                                    /* Scroll to specified event and highlight it */
                                     echo("<script>
                                             jQuery(document).ready(function() {
                                                 document.getElementById('event-" . $urlId . "').scrollIntoView(true);
@@ -73,7 +76,8 @@
                             ?>
                         </div>
                         <div id="editor-pill" class="tab-pane">
-                            <?php                                
+                            <?php
+                                /* Populate form fields if user wants to edit event */
                                 $editUrlId = $_GET["editId"];
 
                                 if ($editUrlId){

@@ -1,4 +1,9 @@
 <?php
+
+    /* Add new events to database
+    *  Currently does not have any validation
+    *  User has responsibility
+    */
     if ($_POST) {
         include "../db-config.php";
 

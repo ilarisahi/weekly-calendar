@@ -1,4 +1,5 @@
 <?php
+    /* Shorten event description */
     function shorten($text, $length) {
         $length = abs((int)$length);
         if(strlen($text) > $length) {
@@ -12,7 +13,8 @@
     setlocale(LC_TIME, "fi_FI");
     $now = date("Y-m-d H:i:s");
 
-    $query = "SELECT * FROM weeklyCalendarEvents WHERE ends>'" . $now . "' ORDER BY starts ASC LIMIT 5";
+    /* Get 5 upcoming events */
+    $query = "SELECT * FROM weeklyCalendarEvents WHERE ends > '" . $now . "' ORDER BY starts ASC LIMIT 5";
     $result = $conn->query($query);
     
     echo ("<div class='calendar-upcoming'>");

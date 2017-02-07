@@ -1,4 +1,6 @@
 <?php
+
+/* Browse calendar depending on chosen direction and render calendar-view */
 if ($_POST["direction"] == "previous") {
 	$firstDay = date('Y-m-d', strtotime($_POST["begin"] . '- 7 days'));
 	$lastDay = date('Y-m-d', strtotime($_POST["begin"] . '- 1 day'));
