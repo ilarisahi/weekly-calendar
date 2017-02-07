@@ -14,3 +14,6 @@ A simple weekly calendar with a upcoming events -widget.
 
 ## Demo
 http://ilee.gq/weekly-calendar/
+
+## To Do
+* Form validation
