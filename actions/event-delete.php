@@ -5,10 +5,13 @@ if ($_POST['clear']) {
 	include '../db-config.php';
 		
 	$id = $_POST['id'];
-	$id = $conn->real_escape_string($id);
 	
-	$sql = "DELETE FROM weeklyCalendarEvents WHERE id = '" . $id . "'";
-	$result = $conn->query($sql) or die($conn->error);
+	$prepared = $conn->prepare("DELETE FROM weeklyCalendarEvents WHERE id = ?");
+	$prepared->bind_param('i', $id);
+
+	if(!$prepared->execute()) {
+		echo $prepared->error;
+	}
 	header('Location: /weekly-calendar');
 	exit();
 }

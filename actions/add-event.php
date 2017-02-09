@@ -20,20 +20,17 @@
         $dateNow = date('Y.m.d H:i:s');
 
         if ($eventId) {
-            $prepared = $conn->prepare("UPDATE weeklyCalendarEvents SET user=?, title=?, eventDate=?, starts=?, ends=?, description=?, location=?, modified=? WHERE id = ?);
-            $prepared->bind_param("ssssssssi", $user, $title, $eventDate,$starts,$ends,$description, $location, $dateNow, $eventId);
-            $prepared->execute();
+            $prepared = $conn->prepare("UPDATE weeklyCalendarEvents SET user=?, title=?, eventDate=?, starts=?, ends=?, description=?, location=?, modified=? WHERE id = ?");
+            $prepared->bind_param('ssssssssi', $user, $title, $eventDate,$starts,$ends,$description, $location, $dateNow, $eventId);
         } else {
             $prepared = $conn->prepare("INSERT INTO weeklyCalendarEvents (hash, user, title, eventDate, starts, ends, description, location, created) VALUES (MD5(?), ?,?,?,?,?,?,?,?)");
-            $prepared->bind_param("sssssssss", $hashRaw, $user, $title, $eventDate,$starts,$ends,$description, $location, $dateNow);
-            $prepared->execute();
+            $prepared->bind_param('sssssssss', $hashRaw, $user, $title, $eventDate,$starts,$ends,$description, $location, $dateNow);
         }
-        $result = $conn->query($query);
 
-        if (!$result) {
-            print($conn->error);
+        if (!$prepared->execute()) {
+            print($prepared->error);
         } else {
-            $data = $conn->insert_id;
+            $data = $prepared->insert_id;
             header("Location: /weekly-calendar/?eventId=".$data);
         }    
     }
