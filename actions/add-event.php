@@ -8,21 +8,25 @@
         include "../db-config.php";
 
         $eventId = $_POST["id"];
-        $user = $conn->real_escape_string($_POST["user"]);
-        $title = $conn->real_escape_string($_POST["title"]);
+        $user = $_POST["user"];
+        $title = $_POST["title"];
         $eventDate = $_POST["event-date"];
         $starts = $eventDate . ' ' . $_POST["starts"];
         $ends = $eventDate . ' ' . $_POST["ends"];
-        $description = $conn->real_escape_string($_POST["description"]);
-        $location = $conn->real_escape_string($_POST["location"]);
+        $description = $_POST["description"];
+        $location = $_POST["location"];
         $hashRaw = $ends + $title;
 
         $dateNow = date('Y.m.d H:i:s');
 
         if ($eventId) {
-            $query = "UPDATE weeklyCalendarEvents SET user='$user', title='$title', eventDate='$eventDate', starts='$starts', ends='$ends', description='$description', location='$location', modified='$dateNow' WHERE id = $eventId";
+            $prepared = $conn->prepare("UPDATE weeklyCalendarEvents SET user=?, title=?, eventDate=?, starts=?, ends=?, description=?, location=?, modified=? WHERE id = ?);
+            $prepared->bind_param("ssssssssi", $user, $title, $eventDate,$starts,$ends,$description, $location, $dateNow, $eventId);
+            $prepared->execute();
         } else {
-            $query = "INSERT INTO weeklyCalendarEvents (hash, user, title, eventDate, starts, ends, description, location, created) VALUES (MD5($hashRaw), '$user','$title','$eventDate','$starts','$ends','$description', '$location', '$dateNow')";
+            $prepared = $conn->prepare("INSERT INTO weeklyCalendarEvents (hash, user, title, eventDate, starts, ends, description, location, created) VALUES (MD5(?), ?,?,?,?,?,?,?,?)");
+            $prepared->bind_param("sssssssss", $hashRaw, $user, $title, $eventDate,$starts,$ends,$description, $location, $dateNow);
+            $prepared->execute();
         }
         $result = $conn->query($query);
 
