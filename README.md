@@ -13,7 +13,7 @@ A simple weekly calendar with a upcoming events -widget.
 * PHP to interact with database
 
 ## Demo
-http://ilee.gq/weekly-calendar/
+http://sahi.gq/weekly-calendar/
 
 ## To Do
 * Form validation
