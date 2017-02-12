@@ -14,8 +14,14 @@
     $now = date("Y-m-d H:i:s");
 
     /* Get 5 upcoming events */
-    $query = "SELECT * FROM weeklyCalendarEvents WHERE ends > '" . $now . "' ORDER BY starts ASC LIMIT 5";
-    $result = $conn->query($query);
+    $prepared = $conn->prepare("SELECT * FROM weeklyCalendarEvents WHERE ends > ? ORDER BY starts ASC LIMIT 5");
+    $prepared->bind_param('s', $now);
+    if(!$prepared->execute()) {
+        echo $prepared->error;
+        $result = null;
+    } else {
+        $result = $prepared->get_result();
+    }
     
     echo ("<div class='calendar-upcoming'>");
     

@@ -38,8 +38,14 @@ echo ("<div class='calendar-content'>
             <div class='day-name'>" . $day . "</div>
             <div class='date'>" . date('d.m.', strtotime($firstDay)) . "</div>");
         
-        $query  = "SELECT * FROM weeklyCalendarEvents WHERE eventDate='" . $firstDay . "' ORDER BY starts ASC";
-        $result = $conn->query($query);
+        $prepared = $conn->prepare("SELECT * FROM weeklyCalendarEvents WHERE eventDate=? ORDER BY starts ASC");
+        $prepared->bind_param('s', $firstDay);
+        if(!$prepared->execute()) {
+		    echo $prepared->error;
+            $result = null;
+	    } else {
+            $result = $prepared->get_result();
+        }
         
         /* Get this week's events from database */
         if ($result->num_rows) {

@@ -45,8 +45,14 @@
                                 $urlId = $_GET["eventId"];
                                 include "db-config.php";
                                 if (!empty($urlId)) {
-                                    $urlQuery = "SELECT eventDate FROM weeklyCalendarEvents WHERE id=$urlId";
-                                    $urlResult = $conn->query($urlQuery);
+                                    $prepared = $conn->prepare("SELECT eventDate FROM weeklyCalendarEvents WHERE id=?");
+                                    $prepared->bind_param('i', $urlId);
+                                    if(!$prepared->execute()) {
+                                        echo $prepared->error;
+                                        $urlResult = null;
+                                    } else {
+                                        $urlResult = $prepared->get_result();
+                                    }
                                     
                                     if($urlResult) {
                                         $urlData = $urlResult->fetch_array(MYSQLI_ASSOC);
@@ -82,8 +88,16 @@
 
                                 if ($editUrlId){
                                     $editId = null; $editUser = null; $editTitle = null; $editLocation = null; $editDate = null; $editStarts = null; $editEnds = null; $editDesc = null;
-                                    $editQuery = "SELECT * FROM weeklyCalendarEvents WHERE id=$editUrlId";
-                                    $editResult = $conn->query($editQuery);
+
+                                    $prepared = $conn->prepare("SELECT * FROM weeklyCalendarEvents WHERE id=?");
+                                    $prepared->bind_param('i', $editUrlId);
+                                    if(!$prepared->execute()) {
+                                        echo $prepared->error;
+                                        $editResult = null;
+                                    } else {
+                                        $editResult = $prepared->get_result();
+                                    }
+
                                     print($conn->error);
                                     if ($editResult) {
                                         echo("<script>
