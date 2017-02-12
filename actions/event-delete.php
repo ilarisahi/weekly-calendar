@@ -6,11 +6,9 @@ if ($_POST['clear']) {
 		
 	$id = $_POST['id'];
 	
-	$prepared = $conn->prepare("DELETE FROM weeklyCalendarEvents WHERE id = ?");
-	$prepared->bind_param('i', $id);
+	$stmt = $pdo->prepare("DELETE FROM weeklyCalendarEvents WHERE id = ?");
 
-	if(!$prepared->execute()) {
-		echo $prepared->error;
+	if(!$stmt->execute(array($id))) {
 	}
 	header('Location: /weekly-calendar');
 	exit();

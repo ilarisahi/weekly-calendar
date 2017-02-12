@@ -20,18 +20,13 @@
         $dateNow = date('Y.m.d H:i:s');
 
         if ($eventId) {
-            $prepared = $conn->prepare("UPDATE weeklyCalendarEvents SET user=?, title=?, eventDate=?, starts=?, ends=?, description=?, location=?, modified=? WHERE id = ?");
-            $prepared->bind_param('ssssssssi', $user, $title, $eventDate,$starts,$ends,$description, $location, $dateNow, $eventId);
+            $stmt = $pdo->prepare("UPDATE weeklyCalendarEvents SET user=?, title=?, eventDate=?, starts=?, ends=?, description=?, location=?, modified=? WHERE id = ?");
+            $stmt->execute(array($user, $title, $eventDate,$starts,$ends,$description, $location, $dateNow, $eventId));
         } else {
-            $prepared = $conn->prepare("INSERT INTO weeklyCalendarEvents (hash, user, title, eventDate, starts, ends, description, location, created) VALUES (MD5(?), ?,?,?,?,?,?,?,?)");
-            $prepared->bind_param('sssssssss', $hashRaw, $user, $title, $eventDate,$starts,$ends,$description, $location, $dateNow);
+            $stmt = $pdo->prepare("INSERT INTO weeklyCalendarEvents (hash, user, title, eventDate, starts, ends, description, location, created) VALUES (MD5(?), ?,?,?,?,?,?,?,?)");
+            $stmt->execute(array($hashRaw, $user, $title, $eventDate,$starts,$ends,$description, $location, $dateNow));
+            $eventId = $pdo->lastInsertId();
         }
-
-        if (!$prepared->execute()) {
-            print($prepared->error);
-        } else {
-            $data = $prepared->insert_id;
-            header("Location: /weekly-calendar/?eventId=".$data);
-        }    
+        header("Location: /weekly-calendar/?eventId=".$eventId);
     }
 ?>

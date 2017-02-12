@@ -14,19 +14,17 @@
     $now = date("Y-m-d H:i:s");
 
     /* Get 5 upcoming events */
-    $prepared = $conn->prepare("SELECT * FROM weeklyCalendarEvents WHERE ends > ? ORDER BY starts ASC LIMIT 5");
-    $prepared->bind_param('s', $now);
-    if(!$prepared->execute()) {
-        echo $prepared->error;
+    $stmt = $pdo->prepare("SELECT * FROM weeklyCalendarEvents WHERE ends > ? ORDER BY starts ASC LIMIT 5");
+    if(!$stmt->execute(array($now))) {
         $result = null;
     } else {
-        $result = $prepared->get_result();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
     echo ("<div class='calendar-upcoming'>");
     
-    if ($result->num_rows) {
-        while($data = $result->fetch_array(MYSQLI_ASSOC)){
+    if ($stmt->rowCount()) {
+        foreach($result as $data){
             $eventDate = date("d.m.", strtotime($data["eventDate"]));
             $starts = date("H:i", strtotime($data["starts"]));
             $ends = date("H:i", strtotime($data["ends"]));

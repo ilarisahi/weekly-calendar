@@ -1,7 +1,6 @@
 <?php
-    /* MySQL database configuration */
+    /* MySQL database configuration using PDO*/
     date_default_timezone_set('Europe/Helsinki');
     setlocale(LC_TIME, "fi_FI");
-    $conn = new mysqli("localhost", "user", "password", "database");
-    $conn->set_charset("utf8");
+    $pdo = new PDO('mysql:host=localhost;dbname=database;charset=utf8', 'username', 'password');
 ?>

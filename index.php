@@ -30,33 +30,26 @@
                                 /* Initialize this week's monday and sunday */
                                 date_default_timezone_set("Europe/Helsinki");
                                 setlocale(LC_TIME, "fi_FI");
-
-                                if (date("N") == 7) {
-                                    $firstDay = date("Y-m-d", strtotime( "monday last week"));
-                                    $lastDay = date("Y-m-d", strtotime( "sunday last week"));
-                                } else {
-                                    $firstDay = date("Y-m-d", strtotime( "monday this week"));
-                                    $lastDay = date("Y-m-d", strtotime( "sunday this week"));
-                                }
+                                $firstDay = date("Y-m-d", strtotime( "monday this week"));
+                                $lastDay = date("Y-m-d", strtotime( "sunday this week"));
                                 $monday = $firstDay . " 00:00:00";
                                 $sunday = $lastDay . " 23:59:59";
 
                                 /* Get new monday and sunday if user has event id */
-                                $urlId = $_GET["eventId"];
+                                
+                                $urlId = null;
                                 include "db-config.php";
-                                if (!empty($urlId)) {
-                                    $prepared = $conn->prepare("SELECT eventDate FROM weeklyCalendarEvents WHERE id=?");
-                                    $prepared->bind_param('i', $urlId);
-                                    if(!$prepared->execute()) {
-                                        echo $prepared->error;
+                                if (!empty($_GET["eventId"])) {
+                                    $urlId = $_GET["eventId"];
+                                    $stmt = $pdo->prepare("SELECT eventDate FROM weeklyCalendarEvents WHERE id=?");
+                                    if(!$stmt->execute(array($urlId))) {
                                         $urlResult = null;
                                     } else {
-                                        $urlResult = $prepared->get_result();
+                                        $urlResult = $stmt->fetch(PDO::FETCH_ASSOC);
                                     }
                                     
                                     if($urlResult) {
-                                        $urlData = $urlResult->fetch_array(MYSQLI_ASSOC);
-                                        $urlDay = $urlData["eventDate"];
+                                        $urlDay = $urlResult["eventDate"];
                                         $urlDayNum = date("N", strtotime($urlDay));
                                         $firstDay = date("Y-m-d", strtotime($urlDay . "-" . ($urlDayNum - 1) . " days"));
                                         $lastDay = date("Y-m-d", strtotime($urlDay . "+" . (7 - $urlDayNum) . " days"));
@@ -70,7 +63,7 @@
                                 include 'calendar-view.php';
                                 echo ("</div>");
 
-                                if ($urlId != 0) {
+                                if ($urlId) {
                                     /* Scroll to specified event and highlight it */
                                     echo("<script>
                                             jQuery(document).ready(function() {
@@ -83,37 +76,33 @@
                         </div>
                         <div id="editor-pill" class="tab-pane">
                             <?php
-                                /* Populate form fields if user wants to edit event */
-                                $editUrlId = $_GET["editId"];
+                                /* Populate form fields if user wants to edit event */                                
+                                $editId = null; $editUser = null; $editTitle = null; $editLocation = null; $editDate = null; $editStarts = null; $editEnds = null; $editDesc = null;
 
-                                if ($editUrlId){
-                                    $editId = null; $editUser = null; $editTitle = null; $editLocation = null; $editDate = null; $editStarts = null; $editEnds = null; $editDesc = null;
-
-                                    $prepared = $conn->prepare("SELECT * FROM weeklyCalendarEvents WHERE id=?");
-                                    $prepared->bind_param('i', $editUrlId);
-                                    if(!$prepared->execute()) {
-                                        echo $prepared->error;
+                                if (!empty($_GET["editId"])){
+                                    $editUrlId = $_GET["editId"];
+                                    
+                                    $stmt = $pdo->prepare("SELECT * FROM weeklyCalendarEvents WHERE id=?");
+                                    if(!$stmt->execute(array($editUrlId))) {
                                         $editResult = null;
                                     } else {
-                                        $editResult = $prepared->get_result();
+                                        $editResult = $stmt->fetch(PDO::FETCH_ASSOC);
                                     }
 
-                                    print($conn->error);
                                     if ($editResult) {
                                         echo("<script>
                                                 jQuery(document).ready(function () {
                                                     $('.nav-pills a[href=\"#editor-pill\"]').tab('show');
                                                 });
                                             </script>");
-                                        $editData = $editResult->fetch_array(MYSQLI_ASSOC);
-                                        $editId = $editData["id"];
-                                        $editUser = $editData["user"];
-                                        $editTitle = $editData["title"];
-                                        $editLocation = $editData["location"];
-                                        $editDate = date("Y-m-d", strtotime($editData["eventDate"]));
-                                        $editStarts = date("H:i", strtotime($editData["starts"]));
-                                        $editEnds = date("H:i", strtotime($editData["ends"]));
-                                        $editDesc = $editData["description"];
+                                        $editId = $editResult["id"];
+                                        $editUser = $editResult["user"];
+                                        $editTitle = $editResult["title"];
+                                        $editLocation = $editResult["location"];
+                                        $editDate = date("Y-m-d", strtotime($editResult["eventDate"]));
+                                        $editStarts = date("H:i", strtotime($editResult["starts"]));
+                                        $editEnds = date("H:i", strtotime($editResult["ends"]));
+                                        $editDesc = $editResult["description"];
                                     }
                                 }
                             ?>
